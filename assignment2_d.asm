@@ -12,97 +12,32 @@ outLab:		.asciiz "It is "
 main:
 		li $v0, 4
 		la $a0, legend1        
-		syscall                   # print legend line 1
+		syscall                 # print legend line 1
 		la $a0, legend2        
-		syscall                   # print legend line 2
+		syscall                 # print legend line 2
 		la $a0, inPrompt        
-		syscall                   # print input prompt
+		syscall                 # print input prompt
 		
 		li $v0, 5
-		syscall                   # read input integer
-
-		##########################################################
-		# Write NO MORE THAN 14 lines of code that involve using 
-		# ONLY the following:
-		# - syscall
-		# - syscall supporting instructions (e.g.: li to load $v0)
-		# - instruction to make a saved copy
-		# - bit manipulating instructions (ANDing, ORing, XORing,
-		#   NORing and shifting - only whatever that are needed)
-		# so that the program will work just like the sample runs 
-		# shown at the bottom.
-		# You MUST test your completed program for AT LEAST the 
-		# test cases shown (and include the result in hardcopy).
-		##########################################################
+		syscall                 # read input integer
 		
-		srl $a0, $v0, 5		# look at 3 msb's
-		andi $t0, $a0, 0x1	# strip the two msb's
-		or $t0, $t0, $0		# or last bit with 0, sto in $t0
-		srl $a0, $a0, 1		# look at 2 msb's
-		andi $t1, $a0, 0x1	# strip msb
-		or $t1, $t1, $0		# or the second msb with 0
-		or $t0, $t1, $t0	# or the two results so far
-		srl $a0, $a0, 1		# look at msb
-		or $a0, $a0, $0		# or msb with 0
-		or $a0, $a0, $t0	# or with other result
+		srl $a0, $v0, 5		# remove all but 3 msb's
+		andi $t0, $a0, 0x1	# hide the two msb's
+		or $t0, $t0, $0		# OR lsb with 0, store in $t0
+		srl $a0, $a0, 1		# remove the lsb
+		andi $t1, $a0, 0x1	# hide msb
+		or $t1, $t1, $0		# OR the lsb with 0
+		or $t0, $t1, $t0	# OR the two results so far
+		srl $a0, $a0, 1		# remove the lsb
+		or $a0, $a0, $0		# OR remaining bit with 0
+		or $a0, $a0, $t0	# OR result with previous result
 
 		li $v0, 1
 		syscall
 		
                 ##########################################################
                                 
-                li $v0, 10               # exit
-                syscall
+terminate:	li $v0, 10               # graceful exit
+		syscall
+		
 
-########################## sample test runs ##############################
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 0
-# It is 0
-# -- program is finished running --
-# 
-# 
-# Reset: reset completed.
-# 
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 31
-# It is 0
-# -- program is finished running --
-# 
-# 
-# Reset: reset completed.
-# 
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 32
-# It is 1
-# -- program is finished running --
-# 
-# 
-# Reset: reset completed.
-# 
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 64
-# It is 1
-# -- program is finished running --
-# 
-# 
-# Reset: reset completed.
-# 
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 128
-# It is 1
-# -- program is finished running --
-# 
-# 
-# Reset: reset completed.
-# 
-# 0: less than 32
-# 1: 32 or higher
-# Enter an integer between 0 and 255: 255
-# It is 1
-# -- program is finished running --
-######################## end sample test runs ############################
